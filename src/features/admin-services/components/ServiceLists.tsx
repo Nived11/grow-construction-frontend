@@ -27,6 +27,7 @@ const ServiceLists: React.FC = () => {
     setPage,
     error,
   } = useServices();
+  
 
   const {
     deleteService,
@@ -37,12 +38,13 @@ const ServiceLists: React.FC = () => {
   const totalPages = pageSize > 0 ? Math.ceil(count / pageSize) : 1;
   useEffect(() => {
     setTimeout(() => {
+
       window.scrollTo({ top: 0, behavior: "smooth" });
     }, 30);
   }, [page]);
 
   if (addingService) {
-    return <AddEditServiceForm onCancel={() => setAddingService(false)} />;
+    return <AddEditServiceForm onCancel={() => setAddingService(false)} onSuccess={() => fetchServices(page)}  />;
   }
 
   if (editingService) {
@@ -50,6 +52,7 @@ const ServiceLists: React.FC = () => {
       <AddEditServiceForm
         initialService={editingService}
         onCancel={() => setEditingService(null)}
+        onSuccess={() => fetchServices(page)}
       />
     );
   }

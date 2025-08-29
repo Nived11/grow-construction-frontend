@@ -12,6 +12,7 @@ import { useRef } from "react";
 interface AddEditServiceFormProps {
   initialService?: any;
   onCancel?: () => void;
+  onSuccess?: () => void;
 }
 
 interface FieldErrorItem {
@@ -30,7 +31,7 @@ interface ServiceFormErrors {
   whyUsList?: FieldErrorItem[];
 }
 
-const AddEditServiceForm: React.FC<AddEditServiceFormProps> = ({ initialService, onCancel, }) => {
+const AddEditServiceForm: React.FC<AddEditServiceFormProps> = ({ initialService, onCancel, onSuccess }) => {
   const { submitService, loading, Iserror } = useServiceForm();
   const errorRef = useRef<HTMLDivElement | null>(null);
 
@@ -98,11 +99,14 @@ const AddEditServiceForm: React.FC<AddEditServiceFormProps> = ({ initialService,
           initialService ? "Service updated successfully!" : "Service added successfully!"
         );
 
-        resetForm();
-        if (onCancel) {
-          setTimeout(() => {
-            onCancel();
-          }, 1000);
+       resetForm();
+  if (onSuccess) {
+    onSuccess();   // ⬅️ re-fetch list
+  }
+  if (onCancel) {
+    setTimeout(() => {
+      onCancel();
+    }, 1000);
         }
       }
     } catch (err: any) {
