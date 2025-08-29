@@ -164,6 +164,10 @@ const ServiceLists: React.FC = () => {
             const success = await deleteService(deleteTarget.id);
             if (success) {
               setDeleteTarget(null);
+              const newCount = count - 1;
+              const newTotalPages = Math.max(1, Math.ceil(newCount / pageSize));
+              const newPage = page > newTotalPages ? newTotalPages : page;
+              await fetchServices(newPage);
               window.scrollTo({ top: 0, behavior: "smooth" });
             }
             return success;

@@ -118,16 +118,21 @@ const GalleryLists = () => {
             const res = await deletePhoto(deleteTarget);
             if (res.success) {
               toast.success("Photo deleted successfully!");
-              setTimeout(() => {
-                fetchGallery(page);
-                setDeleteTarget(null);
-              }, 1000);
+              setDeleteTarget(null);
+              setTimeout(async () => {
+                const newCount = count - 1;
+                const newTotalPages = Math.max(1, Math.ceil(newCount / pageSize))
+                const newPage = page > newTotalPages ? newTotalPages : page;
+                await fetchGallery(newPage);
+                window.scrollTo({ top: 0, behavior: "smooth" });
+              }, 500);
             }
           }
         }}
         loading={deleting}
-        errorMessage={deleteError || undefined} 
+        errorMessage={deleteError || undefined}
       />
+
 
     </>
   );
